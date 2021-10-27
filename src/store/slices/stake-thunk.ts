@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { getAddresses } from "../../constants";
-import { StakingHelperContract, TimeTokenContract, MemoTokenContract, StakingContract } from "../../abi";
+import { StakingHelperContract, PsiTokenContract, SpsiTokenContract, StakingContract } from "../../abi";
 import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from "./pending-txns-slice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchAccountSuccess, getBalances } from "./account-slice";
@@ -25,9 +25,8 @@ export const changeApproval = createAsyncThunk("stake/changeApproval", async ({ 
     const addresses = getAddresses(networkID);
 
     const signer = provider.getSigner();
-    // TODO: update addresses to PSI and sPSI
-    const psiContract = new ethers.Contract(addresses.TIME_ADDRESS, TimeTokenContract, signer);
-    const sPsiContract = new ethers.Contract(addresses.MEMO_ADDRESS, MemoTokenContract, signer);
+    const psiContract = new ethers.Contract(addresses.PSI_ADDRESS, PsiTokenContract, signer);
+    const sPsiContract = new ethers.Contract(addresses.SPSI_ADDRESS, SpsiTokenContract, signer);
 
     let approveTx;
     try {
@@ -62,8 +61,8 @@ export const changeApproval = createAsyncThunk("stake/changeApproval", async ({ 
     return dispatch(
         fetchAccountSuccess({
             staking: {
-                timeStake: Number(stakeAllowance),
-                memoUnstake: Number(unstakeAllowance),
+                psiStake: Number(stakeAllowance),
+                spsiUnstake: Number(unstakeAllowance),
             },
         }),
     );

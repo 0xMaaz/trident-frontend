@@ -26,7 +26,7 @@ function ChooseBond() {
             <Zoom in={true}>
                 <div className="choose-bond-view-card">
                     <div className="choose-bond-view-card-header">
-                        <p className="choose-bond-view-card-title"> Mint (🫖, 🫖)</p>
+                        <p className="choose-bond-view-card-title"> Mint (🔱, 🔱)</p>
                     </div>
 
                     <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
@@ -50,7 +50,7 @@ function ChooseBond() {
 
                         <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">TIME Price</p>
+                                <p className="choose-bond-view-card-metrics-title">PSI Price</p>
                                 <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}</p>
                             </Box>
                         </Grid>

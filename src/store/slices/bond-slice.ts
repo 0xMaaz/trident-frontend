@@ -10,10 +10,10 @@ import { Bond } from "../../helpers/bond/bond";
 import { Networks } from "../../constants/blockchain";
 import { getBondCalculator } from "../../helpers/bond-calculator";
 import { RootState } from "../store";
-import { onePsi, wone } from "../../helpers/bond";
 import { error, warning, success, info } from "../slices/messages-slice";
 import { messages } from "../../constants/messages";
 import { getGasPrice } from "../../helpers/get-gas-price";
+import { frax } from "src/helpers/bond";
 
 interface IChangeApproval {
     bond: Bond;
@@ -113,10 +113,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 9);
     let debtRatio = (await bondContract.standardizedDebtRatio()) / Math.pow(10, 9);
 
-    if (bond.isLP) {
-        debtRatio = debtRatio / Math.pow(10, 7);
-    }
-
     let marketPrice = await getMarketPrice(networkID, provider);
 
     const mimPrice = getTokenPrice("MIM");
@@ -124,12 +120,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
     try {
         bondPrice = await bondContract.bondPriceInUSD();
-
-        if (bond.name === onePsi.name) {
-            const onePrice = getTokenPrice("ONE");
-            bondPrice = bondPrice * onePrice;
-        }
-
         bondDiscount = (marketPrice * Math.pow(10, 18) - bondPrice) / bondPrice;
     } catch (e) {
         console.log("error getting bondPriceInUSD", e);
@@ -168,15 +158,10 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
         purchased = await bondCalcContract.valuation(assetAddress, purchased);
         purchased = (markdown / Math.pow(10, 18)) * (purchased / Math.pow(10, 9));
-
-        if (bond.name === onePsi.name) {
-            const onePrice = getTokenPrice("ONE");
-            purchased = purchased * onePrice;
-        }
-    } else if (bond.name === wone.name) {
+    } else if (bond.name === frax.name) {
         purchased = purchased / Math.pow(10, 18);
-        const onePrice = getTokenPrice("ONE");
-        purchased = purchased * onePrice;
+        const fraxPrice = getTokenPrice("FRAX");
+        purchased = purchased * fraxPrice;
     } else {
         purchased = purchased / Math.pow(10, 18);
     }
@@ -202,9 +187,9 @@ interface IBondAsset {
     networkID: Networks;
     provider: StaticJsonRpcProvider | JsonRpcProvider;
     slippage: number;
-    useAvax: boolean;
+    useFrax: boolean;
 }
-export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, address, bond, networkID, provider, slippage, useAvax }: IBondAsset, { dispatch }) => {
+export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, address, bond, networkID, provider, slippage, useFrax }: IBondAsset, { dispatch }) => {
     const depositorAddress = address;
     const acceptedSlippage = slippage / 100 || 0.005;
     const valueInWei = ethers.utils.parseUnits(value.toString(), "ether");
@@ -219,7 +204,7 @@ export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, a
     try {
         const gasPrice = await getGasPrice(provider);
 
-        if (useAvax) {
+        if (useFrax) {
             bondTx = await bondContract.deposit(valueInWei, maxPremium, depositorAddress, { value: valueInWei, gasPrice });
         } else {
             bondTx = await bondContract.deposit(valueInWei, maxPremium, depositorAddress, { gasPrice });
