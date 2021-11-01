@@ -88,7 +88,7 @@ export function BondTableData({ bond }: IBondProps) {
             <TableCell align="center">
                 <p className="bond-name-title">
                     <>
-                        <span className="currency-icon">{priceUnits(bond)}</span> {isBondLoading ? <Skeleton width="50px" /> : trim(bond.bondPrice, 2)}
+                        <span className="currency-icon"></span> {isBondLoading ? <Skeleton width="50px" /> : trim(bond.bondPrice, 2)}
                     </>
                 </p>
             </TableCell>
