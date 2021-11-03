@@ -33,8 +33,8 @@ export async function getMaxTokenPurchase(networkID: Networks, provider: ethers.
 }
 
 /*
-How much the buyer needs to spend to buy the maximum amount they are whitelisted for
-*/
+ * How much the buyer needs to spend to buy the maximum amount they are whitelisted for
+ */
 export async function getMaxPayment(tokenIn: string, networkID: Networks, provider: ethers.Signer | ethers.providers.Provider): Promise<string> {
     const addresses = getAddresses(networkID);
     const PRESALE_CONTRACT = addresses.PRESALE_CONTRACT;
@@ -47,8 +47,8 @@ export async function getMaxPayment(tokenIn: string, networkID: Networks, provid
 }
 
 /*
-Calculate how many pPSI are received when paying X paymentToken
-*/
+ * Calculate how many pPSI are received when paying X paymentToken
+ */
 export async function tokenOutAmount(tokenIn: string, amountIn: number, networkID: Networks, provider: ethers.Signer | ethers.providers.Provider): Promise<string> {
     const addresses = getAddresses(networkID);
     const PRESALE_CONTRACT = addresses.PRESALE_CONTRACT;
