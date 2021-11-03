@@ -12,6 +12,7 @@ import ViewBase from "../components/ViewBase";
 import { Stake, ChooseBond, Bond, Dashboard, NotFound } from "../views";
 import "./style.scss";
 import Landing from "src/views/Landing";
+import { IPresaleSlice, loadPresaleDetails } from "src/store/slices/presale-slice";
 
 function App() {
     const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function App() {
 
     const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
     const isAppLoaded = useSelector<IReduxState, boolean>(state => !Boolean(state.app.marketPrice));
+    const presaleData = useSelector<IReduxState, IPresaleSlice>(state => state.presale);
 
     const { bonds } = useBonds();
 
@@ -31,6 +33,10 @@ function App() {
 
         if (whichDetails === "app") {
             loadApp(loadProvider);
+        }
+
+        if (whichDetails === "presale") {
+            loadPresale(loadProvider);
         }
 
         if (whichDetails === "account" && address && connected) {
@@ -57,6 +63,13 @@ function App() {
         [connected],
     );
 
+    const loadPresale = useCallback(
+        loadProvider => {
+            dispatch(loadPresaleDetails({ networkID: chainID, provider: loadProvider }));
+        },
+        [connected],
+    );
+
     const loadAccount = useCallback(
         loadProvider => {
             dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
@@ -79,6 +92,7 @@ function App() {
             loadDetails("app");
             loadDetails("account");
             loadDetails("userBonds");
+            loadDetails("presale");
         }
     }, [walletChecked]);
 
@@ -91,6 +105,8 @@ function App() {
     }, [connected]);
 
     if (isAppLoading) return <Loading />;
+
+    console.log("Presale", presaleData);
 
     return (
         <ViewBase>
