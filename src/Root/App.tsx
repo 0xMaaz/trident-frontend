@@ -65,7 +65,7 @@ function App() {
 
     const loadPresale = useCallback(
         loadProvider => {
-            dispatch(loadPresaleDetails({ networkID: chainID, provider: loadProvider, tokenIn: "FRAX" }));
+            dispatch(loadPresaleDetails({ networkID: chainID, provider: loadProvider, stableType: "FRAX" }));
         },
         [connected],
     );
