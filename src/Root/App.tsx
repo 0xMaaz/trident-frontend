@@ -13,6 +13,7 @@ import { Stake, ChooseBond, Bond, Dashboard, NotFound } from "../views";
 import "./style.scss";
 import Landing from "src/views/Landing";
 import { IPresaleSlice, loadPresaleDetails } from "src/store/slices/presale-slice";
+import Presale from "../views/Presale";
 
 function App() {
     const dispatch = useDispatch();
@@ -128,6 +129,10 @@ function App() {
                         );
                     })}
                     <ChooseBond />
+                </Route>
+
+                <Route path="/presale">
+                    <Presale />
                 </Route>
 
                 <Route component={NotFound} />
