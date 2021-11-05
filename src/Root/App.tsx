@@ -36,10 +36,6 @@ function App() {
             loadApp(loadProvider);
         }
 
-        if (whichDetails === "presale") {
-            loadPresale(loadProvider);
-        }
-
         if (whichDetails === "account" && address && connected) {
             loadAccount(loadProvider);
             if (isAppLoaded) return;
@@ -60,13 +56,6 @@ function App() {
             bonds.map(bond => {
                 dispatch(calcBondDetails({ bond, value: null, provider: loadProvider, networkID: chainID }));
             });
-        },
-        [connected],
-    );
-
-    const loadPresale = useCallback(
-        loadProvider => {
-            dispatch(loadPresaleDetails({ networkID: chainID, provider: loadProvider }));
         },
         [connected],
     );

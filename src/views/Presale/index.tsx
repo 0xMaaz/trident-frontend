@@ -23,6 +23,9 @@ import BondLogo from "src/components/BondLogo";
 import fraxToken from "../../assets/tokens/FRAX.svg";
 import ustToken from "../../assets/tokens/UST.svg";
 import psiToken from "../../assets/tokens/PSI.svg";
+import switchTokens from "../../assets/icons/feather_arrow-down-circle.svg";
+import arrowDown from "../../assets/icons/feather_chevron-down.svg";
+
 import { getMaxTokenPurchase, getMaxPayment, getTokenPrice, tokenInAmount } from "src/helpers/pre-sale";
 import { BuySpecificAmount, tokenOutAmount } from "src/store/slices/presale-slice";
 import { getAddresses, TOKEN_DECIMALS, DEFAULT_NETWORK } from "../../constants";
@@ -62,6 +65,7 @@ function StableCoinDropdown({ selectedIndex, setSelectedIndex }: { selectedIndex
             <div className="presale-menu-btn">
                 <img src={option.image} width="32px" height="32px" />
                 <span className="presale-menu-btn-text">{option.token}</span>
+                <img src={arrowDown} style={{ height: "32px", width: "32px", marginRight: "4px" }} />
             </div>
 
             <Popper className="psi-menu-popper" open={open} anchorEl={anchorEl} transition>
@@ -77,6 +81,7 @@ function StableCoinDropdown({ selectedIndex, setSelectedIndex }: { selectedIndex
                                         className="presale-tooltip-item"
                                         onClick={() => {
                                             setSelectedIndex(index);
+                                            console.log("Set selected index call", index);
                                         }}
                                     >
                                         <img src={currentOption.image} width="32px" height="32px" />
@@ -92,6 +97,13 @@ function StableCoinDropdown({ selectedIndex, setSelectedIndex }: { selectedIndex
     );
 }
 
+// TODOs
+// 1. Get UST Balance
+// 2. Get FRAX Balance
+// 3. Convert UST amount to PSI amount
+// 4. Convert Frax amount to PSI amount
+// 5. Get max PSI amount
+
 function Presale() {
     const dispatch = useDispatch();
     const { provider, address, connect, chainID, checkWrongNetwork } = useWeb3Context();
@@ -99,10 +111,8 @@ function Presale() {
     const [tokenAmount, setTokenAmount] = useState<string>("");
     const [psiAmount, setPsiAmount] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const maximumTokenAmount = useSelector<IReduxState, string>(state => state.presale.maximumTokenAmount);
-
-    const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const maxPSIPurchasable = 0.0012873;
 
     useEffect(() => {}, []);
 
@@ -112,10 +122,20 @@ function Presale() {
         await dispatch(changeApproval({ address, token, provider, networkID: chainID }));
     };
 
-    const handleOnChangeAmount = async (e: any) => {
-        setTokenAmount(e.target.value);
+    const getMaxAmount = (index: number) => {
+        setSelectedIndex(index);
+    };
+
+    const handleTokenOnChangeAmount = async (value: any) => {
+        setTokenAmount(value);
         const token = options[selectedIndex].token;
-        dispatch(tokenOutAmount({ networkID: chainID, provider, stableType: token, stableAmountOut: e.target.value }));
+        dispatch(tokenOutAmount({ networkID: chainID, provider, stableType: token, stableAmountOut: value }));
+    };
+
+    const handlePSIOnChangeAmount = async (value: any) => {
+        setPsiAmount(value);
+        const token = options[selectedIndex].token;
+        dispatch(tokenOutAmount({ networkID: chainID, provider, stableType: token, stableAmountOut: value }));
     };
 
     return (
@@ -147,10 +167,15 @@ function Presale() {
                                                 placeholder="0.0"
                                                 className="presale-card-action-input"
                                                 value={tokenAmount}
-                                                onChange={e => handleOnChangeAmount(e.target.value)}
+                                                onChange={e => handleTokenOnChangeAmount(e.target.value)}
                                                 labelWidth={0}
                                                 startAdornment={<StableCoinDropdown selectedIndex={selectedIndex} setSelectedIndex={getMaxAmount} />}
                                             />
+                                        </div>
+                                        <div className="presale-switch-tokens-container">
+                                            <div className="presale-switch-tokens-background">
+                                                <img src={switchTokens} style={{ height: "32px", width: "32px" }} />
+                                            </div>
                                         </div>
 
                                         <div className="presale-card-action-row">
@@ -158,9 +183,9 @@ function Presale() {
                                                 type="number"
                                                 placeholder="0.0"
                                                 className="presale-card-action-input"
-                                                value={quantity}
+                                                value={psiAmount}
                                                 onChange={e => {
-                                                    return;
+                                                    handlePSIOnChangeAmount(e.target.value);
                                                 }}
                                                 labelWidth={0}
                                                 startAdornment={
@@ -172,9 +197,10 @@ function Presale() {
                                             />
                                         </div>
                                     </div>
+                                    <div className="presale-max-ppsi-purchasable">Max PPSI Purchasable : {maxPSIPurchasable}</div>
                                     <div className="presale-card-wallet-notification">
                                         <div className="presale-card-wallet-connect-btn" onClick={connect}>
-                                            <p>Swap</p>
+                                            Swap
                                         </div>
                                     </div>
                                 </div>

@@ -28,6 +28,35 @@
     }
 }
 
+.presale-switch-tokens-container {
+    position: absolute;
+    z-index: 1;
+    left: 45%;
+    top: 39%;
+    padding: 4px;
+    text-align: center;
+    background: rgba(61, 61, 61, 0.54);
+    backdrop-filter: blur(32px);
+    border-radius: 5px;
+    .presale-switch-tokens-background {
+        background: rgba(0, 0, 0, 0.47);
+        padding: 2px;
+        border-radius: 5px;
+        display: flex;
+    }
+}
+
+.presale-max-ppsi-purchasable {
+    font-family: Cinzel;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+    color: #ffffff;
+    margin-top: 8px;
+    text-align: right;
+}
+
 .presale-view {
     width: 89%;
     max-width: 833px;
@@ -59,16 +88,15 @@
     .presale-card {
         position: relative;
         z-index: 2;
-        padding: 20px;
-        max-width: 500px;
+        padding: 16px;
+        width: 500px;
+        height: 339px;
         margin: auto;
         background: rgba(61, 61, 61, 0.54);
         backdrop-filter: blur(32px);
         /* Note: backdrop-filter has minimal browser support */
 
         border-radius: 15px;
-
-        width: 100%;
 
         .presale-card-grid {
             margin: 0;
@@ -77,11 +105,12 @@
 
         .presale-card-header {
             .presale-card-header-title {
-                font-family: Cinzel Bold;
+                font-family: Cinzel;
+                font-style: normal;
                 font-weight: bold;
-                font-size: 20px;
+                font-size: 24px;
+                line-height: 32px;
                 color: #ffffff;
-                margin-bottom: 4px;
             }
         }
 
@@ -135,6 +164,12 @@
                     @include theme.primary-button();
 
                     margin-top: 20px;
+                    font-family: Cinzel;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 18px;
+                    line-height: 24px;
+                    color: #232323;
                 }
 
                 .presale-card-wallet-desc-text {
@@ -149,7 +184,7 @@
 
             .presale-card-action-area {
                 width: 100%;
-                margin-top: 25px;
+                margin-top: 12px;
 
                 .presale-card-action-stage-btns-wrap {
                     display: flex;
@@ -183,7 +218,7 @@
                 .presale-card-action-row {
                     display: flex;
                     align-items: center;
-                    margin-top: 20px;
+                    margin-top: 14px;
 
                     .presale-card-action-input {
                         width: 100%;
