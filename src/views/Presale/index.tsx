@@ -24,7 +24,7 @@ import fraxToken from "../../assets/tokens/FRAX.svg";
 import ustToken from "../../assets/tokens/UST.svg";
 import psiToken from "../../assets/tokens/PSI.svg";
 import { getMaxTokenPurchase, getMaxPayment, getTokenPrice, tokenInAmount } from "src/helpers/pre-sale";
-import { BuySpecificAmount, tokenOutAmount } from "src/store/slices/presale-slice";
+import { BuySpecificAmount, PaySpecificAmount, tokenOutAmount } from "src/store/slices/presale-slice";
 import { getAddresses, TOKEN_DECIMALS, DEFAULT_NETWORK } from "../../constants";
 import { Link, Fade, Popper } from "@material-ui/core";
 import { getTokenUrl } from "../../helpers";
@@ -92,6 +92,8 @@ function StableCoinDropdown({ selectedIndex, setSelectedIndex }: { selectedIndex
     );
 }
 
+
+
 function Presale() {
     const dispatch = useDispatch();
     const { provider, address, connect, chainID, checkWrongNetwork } = useWeb3Context();
@@ -99,12 +101,36 @@ function Presale() {
     const [tokenAmount, setTokenAmount] = useState<string>("");
     const [psiAmount, setPsiAmount] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const maximumTokenAmount = useSelector<IReduxState, string>(state => state.presale.maximumTokenAmount);
+    const maximumTokenAmount = useSelector<IReduxState, string>(state => state.presale.maximumTokmaxPpsiInenAmount);
 
     const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     useEffect(() => {}, []);
+
+    interface IPurchaseStableAmount {
+        stableType: string;
+        stableToPay: string;
+        slippage: number;
+        recipientAddress: string;
+    }
+    /*
+     *  use: await dispatch( purchaseStableAmount({stableType, stableToPay, slippage, recipientAddress}) );
+     */
+    async function purchaseStableAmount({ stableType, stableToPay, slippage, recipientAddress }: IPurchaseStableAmount) {
+        //const dispatch = useDispatch();
+        const { provider, address, chainID, checkWrongNetwork } = useWeb3Context();
+        if (await checkWrongNetwork()) return;
+    
+        await dispatch(
+            PaySpecificAmount({
+                networkID: chainID,
+                provider,
+                stableType,
+                stableToPay,
+            }),
+        );
+    }
 
     const onSeekApproval = async (token: string) => {
         if (await checkWrongNetwork()) return;

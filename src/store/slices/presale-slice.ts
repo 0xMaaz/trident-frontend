@@ -13,7 +13,7 @@ import { getGasPrice } from "../../helpers/get-gas-price";
 interface ILoadPresaleDetails {
     networkID: number;
     provider: JsonRpcProvider;
-    stableType: string; // Is this ok to have for initial load?
+    stableType: string; 
 }
 
 export interface IPresaleSlice {
@@ -117,7 +117,7 @@ export const BuySpecificAmount = createAsyncThunk(
         let approveTx;
         let purchaseTx;
         try {
-            const gasPrice = await getGasPrice(provider);
+            let gasPrice = await getGasPrice(provider);
 
             approveTx = await stableContract.approve(PRESALE_CONTRACT, ethers.constants.MaxUint256, { gasPrice });
             const text = "Approve " + (stableType === "FRAX" ? "FRAX" : "UST");
@@ -126,8 +126,10 @@ export const BuySpecificAmount = createAsyncThunk(
             dispatch(success({ text: messages.tx_successfully_send }));
             await approveTx.wait();
             const text2 = "Swapping";
-            purchaseTx = await contract.buySpecificAmount(TOKEN_ADDRESS, ppsiToPurchase);
+            gasPrice = await getGasPrice(provider);
+            purchaseTx = await contract.buySpecificAmount(TOKEN_ADDRESS, ethers.utils.parseUnits(ppsiToPurchase, "gwei"), { gasPrice });
             dispatch(success({ text: messages.tx_successfully_send }));
+            await purchaseTx.wait();
         } catch (err: any) {
             dispatch(error({ text: messages.something_wrong, error: err.message }));
             return;
@@ -172,7 +174,7 @@ export const PaySpecificAmount = createAsyncThunk(
             dispatch(success({ text: messages.tx_successfully_send }));
             await approveTx.wait();
             const text2 = "Swapping";
-            purchaseTx = await contract.buyWithSpecificPayment(TOKEN_ADDRESS, stableToPay);
+            purchaseTx = await contract.buyWithSpecificPayment(TOKEN_ADDRESS, ethers.utils.parseUnits(stableToPay, "gwei"));
             dispatch(success({ text: messages.tx_successfully_send }));
         } catch (err: any) {
             dispatch(error({ text: messages.something_wrong, error: err.message }));
