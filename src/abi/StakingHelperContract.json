@@ -2,63 +2,21 @@
     "abi": [
         {
             "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "_staking",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "_Psi",
-                    "type": "address"
-                }
+                { "internalType": "address", "name": "_staking", "type": "address" },
+                { "internalType": "address", "name": "_OHM", "type": "address" }
             ],
             "stateMutability": "nonpayable",
             "type": "constructor"
         },
-        {
-            "inputs": [],
-            "name": "Psi",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_amount",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "address",
-                    "name": "recipient",
-                    "type": "address"
-                }
-            ],
-            "name": "stake",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
+        { "inputs": [], "name": "OHM", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function", "constant": true },
         {
             "inputs": [],
             "name": "staking",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
             "stateMutability": "view",
-            "type": "function"
-        }
+            "type": "function",
+            "constant": true
+        },
+        { "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }], "name": "stake", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
     ]
 }
