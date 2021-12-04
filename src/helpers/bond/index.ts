@@ -55,11 +55,11 @@ export const frax = new StableBond({
 });
 
 // todo - rename
-export const mimPsi = new LPBond({
-    name: "mim_psi_lp",
-    displayName: "PSI-MIM LP",
-    bondToken: "MIM",
-    bondIconSvg: MimIcon,
+export const fraxPsi = new LPBond({
+    name: "frax_psi_lp",
+    displayName: "PSI-frax LP",
+    bondToken: "frax",
+    bondIconSvg: FraxIcon,
     bondContractABI: LpBondContract,
     reserveContractAbi: LpReserveContract,
     networkAddrs: {
@@ -71,4 +71,4 @@ export const mimPsi = new LPBond({
     lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 });
 
-export default [ust, frax];
+export default [frax, fraxPsi];
