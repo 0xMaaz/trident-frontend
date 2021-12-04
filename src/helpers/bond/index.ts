@@ -8,7 +8,8 @@ import FraxIcon from "../../assets/tokens/FRAX.svg";
 
 import { StableBondContract, LpBondContract, StableReserveContract, LpReserveContract } from "../../abi";
 
-export const mim = new StableBond({ // TODO - not needed
+// TODO - not needed
+export const mim = new StableBond({
     name: "mim",
     displayName: "MIM",
     bondToken: "MIM",
@@ -53,11 +54,12 @@ export const frax = new StableBond({
     },
 });
 
-export const mimPsi = new LPBond({ // todo - rename
-    name: "mim_psi_lp",
-    displayName: "PSI-MIM LP",
-    bondToken: "MIM",
-    bondIconSvg: MimIcon,
+// todo - rename
+export const fraxPsi = new LPBond({
+    name: "frax_psi_lp",
+    displayName: "PSI-frax LP",
+    bondToken: "frax",
+    bondIconSvg: FraxIcon,
     bondContractABI: LpBondContract,
     reserveContractAbi: LpReserveContract,
     networkAddrs: {
@@ -69,4 +71,4 @@ export const mimPsi = new LPBond({ // todo - rename
     lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 });
 
-export default [ust, frax];
+export default [frax, fraxPsi];
