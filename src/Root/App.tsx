@@ -9,7 +9,7 @@ import { IReduxState } from "../store/slices/state.interface";
 import Loading from "../components/Loader";
 import useBonds from "../hooks/bonds";
 import ViewBase from "../components/ViewBase";
-import { Stake, ChooseBond, Bond, Dashboard, NotFound } from "../views";
+import { Stake, ChooseBond, Bond, Dashboard, Chart, NotFound } from "../views";
 import "./style.scss";
 import Landing from "src/views/Landing";
 
@@ -112,6 +112,10 @@ function App() {
                         );
                     })}
                     <ChooseBond />
+                </Route>
+
+                <Route path="/chart">
+                    <Chart />
                 </Route>
 
                 <Route component={NotFound} />
