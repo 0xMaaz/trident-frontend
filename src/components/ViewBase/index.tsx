@@ -57,11 +57,18 @@ function ViewBase({ children }: IViewBaseProps) {
                 <div className="navigation-container">
                     <Link to="/stake">Stake</Link>
                     <Link to="/bond">Bond</Link>
+                    <Link to="/dashboard">Dashboard</Link>
                 </div>
 
-                {children}
+                {/* {children} */}
             </div>
-
+            <div className="social-links-container">
+                <Link to="/stake">TWITTER</Link>
+                <Link to="/bond">MEDIUM</Link>
+                <Link to="/dashboard">DOCS</Link>
+                <Link to="/dashboard">GITHUB</Link>
+                <Link to="/dashboard">DISCORD</Link>
+            </div>
             {/* <Messages />
             <Header drawe={!isSmallerScreen} handleDrawerToggle={handleDrawerToggle} />
             <div className={classes.drawer}>

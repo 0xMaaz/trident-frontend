@@ -78,6 +78,8 @@ a:hover {
 
 @mixin primary-button {
     cursor: pointer;
+    transition: all 0.4s ease;
+    background: $saffron;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,49 +87,30 @@ a:hover {
     border-radius: 10px;
     text-align: center;
     padding: 0 1rem;
-    text-decoration: none;
+    @include card-hover();
 
     &:hover {
-        p {
-            &::before {
-                @include transition();
-                margin-right: 0.5rem;
-            }
-
-            &::after {
-                @include transition();
-                margin-left: 0.5rem;
-            }
-        }
+        background: lighten($saffron, 5%);
     }
 
     p {
-        color: $white;
+        color: $black;
+        font-family: Cinzel Semibold;
+        font-weight: 600;
         font-size: 1rem;
-
-        &::before {
-            @include transition();
-            content: ">";
-            margin-right: 1rem;
-            text-decoration: none !important;
-        }
-
-        &::after {
-            @include transition();
-            content: "<";
-            margin-left: 1rem;
-            text-decoration: none !important;
-        }
     }
 }
 
 @mixin input {
-    border-radius: 4px;
-    border-bottom: 1px solid $white;
+    background: transparentize($saffron, 0.75);
+    border: 1px solid $saffron;
+    border-radius: 10px;
+    outline: none;
     height: 48px;
 
     input {
-        font-family: "Lunchtime Doubly So";
+        font-family: Cinzel Semibold;
+        font-weight: 600;
         font-size: 1rem;
         padding: 0 1rem;
         color: $white;
