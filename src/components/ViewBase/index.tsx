@@ -6,6 +6,7 @@ import { DRAWER_WIDTH, TRANSITION_DURATION } from "../../constants/style";
 import MobileDrawer from "../Drawer/mobile-drawer";
 import Drawer from "../Drawer";
 import Messages from "../Messages";
+import { Link } from "react-router-dom";
 
 interface IViewBaseProps {
     children: React.ReactNode;
@@ -51,8 +52,17 @@ function ViewBase({ children }: IViewBaseProps) {
 
     return (
         <div className="view-base-root">
-            <div className="bg-mascot" />
-            <Messages />
+            <div className="bg-mascot"></div>
+            <div className="ui-container">
+                <div className="navigation-container">
+                    <Link to="/stake">Stake</Link>
+                    <Link to="/bond">Bond</Link>
+                </div>
+
+                {children}
+            </div>
+
+            {/* <Messages />
             <Header drawe={!isSmallerScreen} handleDrawerToggle={handleDrawerToggle} />
             <div className={classes.drawer}>
                 <Hidden mdUp>
@@ -62,7 +72,7 @@ function ViewBase({ children }: IViewBaseProps) {
                     <Drawer />
                 </Hidden>
             </div>
-            <div className={`${classes.content} ${isSmallerScreen && classes.contentShift}`}>{children}</div>
+            <div className={`${classes.content} ${isSmallerScreen && classes.contentShift}`}>{children}</div> */}
         </div>
     );
 }
