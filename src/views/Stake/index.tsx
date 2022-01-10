@@ -102,13 +102,6 @@ function Stake() {
                 <div className="stake-card">
                     <Grid className="stake-card-grid" container direction="column" spacing={2}>
                         <Grid item>
-                            <div className="stake-card-header">
-                                <p className="stake-card-header-title">Stake (🔱,🔱)</p>
-                                <RebaseTimer />
-                            </div>
-                        </Grid>
-
-                        <Grid item>
                             <div className="stake-card-metrics">
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={4} md={4} lg={4}>

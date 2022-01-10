@@ -1,31 +1,11 @@
 @use "src/theme.scss";
 
 .stake-view {
-    width: 89%;
-    max-width: 833px;
-    margin: auto;
 
     .stake-card {
-        position: relative;
-        z-index: 2;
-
-        @include theme.card();
-
-        width: 100%;
-
         .stake-card-grid {
             margin: 0;
             width: 100%;
-        }
-
-        .stake-card-header {
-            .stake-card-header-title {
-                font-family: Cinzel Bold;
-                font-weight: bold;
-                font-size: 20px;
-                color: #ffffff;
-                margin-bottom: 4px;
-            }
         }
 
         .stake-card-metrics {
@@ -47,20 +27,13 @@
                 overflow: hidden;
 
                 .stake-card-metrics-title {
-                    font-family: Cinzel Medium;
-                    font-style: normal;
                     font-weight: 500;
-                    font-size: 20px;
                     color: rgba(255, 255, 255, 0.6);
-                    margin-bottom: 2px;
+                    margin-bottom: 0.5rem;
                 }
 
                 .stake-card-metrics-value {
-                    font-family: Cinzel Bold;
-                    font-style: normal;
                     font-weight: bold;
-                    font-size: 24px;
-                    line-height: 29px;
                     color: #ffffff;
                 }
             }
@@ -77,7 +50,6 @@
                 }
 
                 .stake-card-wallet-desc-text {
-                    font-family: Cinzel Light;
                     font-weight: 300;
                     font-size: 14px;
                     color: rgba(255, 255, 255, 0.6);
@@ -96,16 +68,12 @@
                     justify-content: center;
 
                     .stake-card-action-stage-btn {
-                        margin: 0px 30px;
-                        padding: 6px;
+                        margin: 0px 1rem;
                         cursor: pointer;
-                        transition: all 0.4s ease;
 
                         p {
-                            font-family: Cinzel SemiBold;
-                            font-style: normal;
                             font-weight: 600;
-                            font-size: 18px;
+                            // font-size: 18px;
                             color: rgba(255, 255, 255, 0.6);
                         }
                     }
@@ -135,9 +103,9 @@
 
                         .stake-card-action-input-btn {
                             cursor: pointer;
+                            font-family: "Lunchtime Doubly So";
 
                             p {
-                                font-family: Cinzel SemiBold;
                                 font-weight: 600;
                                 font-size: 18px;
                                 color: #ffffff;
@@ -159,7 +127,6 @@
                     margin-top: 10px;
 
                     p {
-                        font-family: Cinzel Light;
                         font-style: normal;
                         font-weight: 300;
                         font-size: 14px;
@@ -186,14 +153,12 @@
     margin: 12px 0px;
 
     .data-row-name {
-        font-family: Cinzel Medium;
         font-style: normal;
         font-weight: 500;
         font-size: 14px;
         color: #ffffff;
     }
     .data-row-value {
-        font-family: Cinzel;
         font-size: 14px;
         line-height: 17px;
         color: #ffffff;
