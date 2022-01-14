@@ -26,9 +26,7 @@
         position: relative;
         top: 33%;
         left: 0%;
-        width: 33%;
-        min-width: 500px;
-        // min-height: 34%;
+        width: 417px;
         max-height: 60%;
         overflow-x: hidden;
         overflow-y: scroll;
@@ -52,25 +50,31 @@
 
         .navigation-container {
             a {
-                background: theme.$saffron;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 48px;
+                height: 37px;
+                width: 367px;
                 border-radius: 10px;
                 text-align: center;
                 padding: 0 1rem;
                 text-decoration: none;
                 margin-right: 1rem;
-                color: theme.$black;
+                color: theme.$white;
                 cursor: pointer;
                 font-family: "Lunchtime Doubly So";
                 font-size: 1rem;
                 margin-bottom: 1rem;
+                background-image: url("../../assets/images/button_normal.png");
+                background-repeat: no-repeat;
+                background-size: contain;
 
                 &:hover {
-                    color: #ffffff;
-                    text-decoration: underline;
+                    background-image: url("../../assets/images/button_hover.gif");
+                }
+
+                &:active {
+                    background-image: url("../../assets/images/button_click.gif");
                 }
 
                 &:last-of-type {
@@ -91,33 +95,40 @@
         display: flex;
         flex-direction: column;
         padding: 1rem;
-        transform: rotate(-5deg);
+        transform: rotate(-5deg) scale(0.8);
+        max-height: 36%;
+        // transform: scale(0.5);
 
         &::-webkit-scrollbar {
             display: none;
         }
 
         a {
-            background: theme.$indigo-dye;
+            // background: theme.$indigo-dye;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 36px;
-            border-radius: 10px;
+            align-items: flex-start;
+            padding-top: 0.4rem;
+            height: 52px;
+            width: 111px;
             text-align: center;
-            padding: 0 1rem;
             text-decoration: none;
-            margin-right: 1rem;
-            color: theme.$white;
+            color: theme.$black;
             cursor: pointer;
             font-family: "Lunchtime Doubly So";
             font-size: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            background-image: url("../../assets/images/social_button_normal.png");
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: 50% 50%;
 
             &:hover {
-                // color: #ffffff;
-                background-color: theme.$lynch;
-                text-decoration: underline;
+                background-image: url("../../assets/images/social_button_hover.gif");
+            }
+
+            &:active {
+                background-image: url("../../assets/images/social_button_click.gif");
             }
         }
     }
