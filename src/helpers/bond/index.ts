@@ -56,8 +56,8 @@ export const frax = new StableBond({
 // todo - rename
 export const fraxPsi = new LPBond({
     name: "frax_psi_lp",
-    displayName: "PSI-FRAX LP",
-    bondToken: "FRAX",
+    displayName: "PSI-frax LP",
+    bondToken: "frax",
     bondIconSvg: FraxIcon,
     bondContractABI: LpBondContract,
     reserveContractAbi: LpReserveContract,
