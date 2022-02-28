@@ -3,13 +3,14 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddress, useWeb3Context } from "../hooks";
 import { calcBondDetails } from "../store/slices/bond-slice";
+import { getPresaleDetails } from "../store/slices/presale-slice";
 import { loadAppDetails } from "../store/slices/app-slice";
 import { loadAccountDetails, calculateUserBondDetails } from "../store/slices/account-slice";
 import { IReduxState } from "../store/slices/state.interface";
 import Loading from "../components/Loader";
 import useBonds from "../hooks/bonds";
 import ViewBase from "../components/ViewBase";
-import { Stake, ChooseBond, Bond, Dashboard, NotFound } from "../views";
+import { Stake, ChooseBond, Bond, Presale, Dashboard, NotFound } from "../views";
 import "./style.scss";
 import Landing from "src/views/Landing";
 
@@ -53,6 +54,7 @@ function App() {
             bonds.map(bond => {
                 dispatch(calcBondDetails({ bond, value: null, provider: loadProvider, networkID: chainID }));
             });
+            dispatch(getPresaleDetails({ provider, networkID: chainID, address }))
         },
         [connected],
     );
@@ -113,6 +115,11 @@ function App() {
                     })}
                     <ChooseBond />
                 </Route>
+
+                <Route path="/presale">
+                    <Presale />
+                </Route>
+                
 
                 <Route component={NotFound} />
             </Switch>

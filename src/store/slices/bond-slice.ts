@@ -72,6 +72,7 @@ export const changeApproval = createAsyncThunk("bonding/changeApproval", async (
     );
 });
 
+
 interface ICalcBondDetails {
     bond: Bond;
     value: string | null;
