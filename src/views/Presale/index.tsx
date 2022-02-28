@@ -163,7 +163,6 @@ function Presale() {
                                                                 if (isPendingTxn(pendingTransactions, "presale")) return;
                                                                 onBuyPresale();
                                                             }}
-                                                            
                                                         >
                                                             <p>{txnButtonText(pendingTransactions, "presale", "Buy PSI")}</p>
                                                         </div>
@@ -212,7 +211,6 @@ function Presale() {
                                                 </div>
                                             )}
                                         </div>
-
                                     
                                     </div>
                                     {view === 0 && (
@@ -224,49 +222,58 @@ function Presale() {
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Max Amount Payable</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>${trim(Number(buyable),2)} FRAX</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>${trim(Number(buyable),2)} FRAX</>}</p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Max Amount Buyable</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(Number(buyable)/(Number(psiPrice)/Math.pow(10,18)),2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{trim(Number(buyable)/(Number(psiPrice)/Math.pow(10,18)),2)} PSI</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Price per PSI</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>${Number(psiPrice)/Math.pow(10,18)} FRAX</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>${Number(psiPrice) / Math.pow(10, 18)} FRAX</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Time Until Vesting Starts</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Vesting Term</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
                                             </div>
-                                        </div>)}
+                                        </div>
+                                    )}
                                     {view === 1 && (
                                         <div className="presale-user-data">
                                             <div className="data-row">
                                                 <p className="data-row-name">Claimable PSI</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(claimablePsi, 2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{trim(claimablePsi, 2)} PSI</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Claimed PSI</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(claimedPsi, 2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{trim(claimedPsi, 2)} PSI</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Time Until Vesting Starts</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Vesting Term</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
                                             </div>
                                         </div>
                                     )}
