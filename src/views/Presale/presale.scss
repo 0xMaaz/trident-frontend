@@ -152,7 +152,10 @@
                         .presale-card-tab-panel-btn {
                             @include theme.primary-button();
                         }
-                        
+                        .presale-card-tab-panel-non {
+                            @include theme.primary-button();
+                            cursor: default;
+                        }
                     }
                 }
 

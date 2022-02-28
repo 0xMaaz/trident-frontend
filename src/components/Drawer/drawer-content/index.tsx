@@ -31,6 +31,9 @@ function NavContent() {
         if (currentPath.indexOf("mints") >= 0 && page === "mints") {
             return true;
         }
+        if (currentPath.indexOf("presale") >= 0 && page === "presale") {
+            return true;
+        }
         return false;
     }, []);
 
@@ -92,6 +95,21 @@ function NavContent() {
                         <div className="dapp-menu-item">
                             <SvgIcon component={BondIcon} />
                             <p>Mint</p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        component={NavLink}
+                        id="presale-nav"
+                        to="/presale"
+                        isActive={(match: any, location: any) => {
+                            return checkPage(location, "presale");
+                        }}
+                        className={classnames("button-dapp-menu", { active: isActive })}
+                    >
+                        <div className="dapp-menu-item">
+                            <SvgIcon component={BondIcon} />
+                            <p>Presale</p>
                         </div>
                     </Link>
 

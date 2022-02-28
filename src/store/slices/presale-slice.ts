@@ -25,9 +25,9 @@ interface IGetPresaleDetails {
 
 export interface IPresaleDetails {
     contract: string;
-    claimablePsi: number;
+    claimablePsi: string;
     amountBuyable: string;
-    claimedPsi: number;
+    claimedPsi: string;
     vestingStart: string;
     vestingTerm: string;
     psiPrice: number;
@@ -36,9 +36,9 @@ export interface IPresaleDetails {
 }
 
 export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", async ({ provider, networkID, address }: IGetPresaleDetails, { dispatch }) => {
-    let claimablePsi = 0,
+    let claimablePsi = "",
         amountBuyable = "",
-        claimedPsi = 0,
+        claimedPsi = "",
         vestingStart = "",
         vestingTerm = "",
         psiPrice = 0;
@@ -70,7 +70,7 @@ export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", a
     }
 
     let approvedContract = new Contract(approvedContractAddress, PresaleContract, provider);
-    let term = await approvedContract.terms(address);
+
     claimablePsi = await approvedContract.claimableFor(address);
     amountBuyable = await approvedContract.buyableFor(address);
     claimedPsi = await approvedContract.claimed(address);
@@ -82,7 +82,12 @@ export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", a
     const currentBlock = await provider.getBlockNumber();
     const currentBlockTime = (await provider.getBlock(currentBlock)).timestamp;
 
-    amountBuyable = ethers.utils.formatEther(amountBuyable)
+    claimablePsi = ethers.utils.formatUnits(claimablePsi, 9);
+    amountBuyable = ethers.utils.formatEther(amountBuyable);
+    claimedPsi = ethers.utils.formatUnits(claimedPsi, 9);
+
+    console.log("CLAIMABLE: ", claimablePsi);
+    console.log("CLAIMMED: ", claimedPsi);
 
     vestingStart = prettyVestingPeriod(currentBlock, vestingStartBlock);
     vestingTerm = prettyVestingPeriod(vestingStartBlock,(vestingStartBlock.add(vestingTermBlock)));
@@ -91,6 +96,7 @@ export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", a
     const reserveContract = frax.getContractForReserve(networkID, signer);
     const allowance = await reserveContract.allowance(address, approvedContractAddress);
     const balance = await reserveContract.balanceOf(address);
+   
     const allowanceVal = ethers.utils.formatEther(allowance);
     const balanceVal = ethers.utils.formatEther(balance);
 
@@ -138,7 +144,7 @@ export const changeApproval = createAsyncThunk("bonding/changeApproval", async (
             fetchPendingTxns({
                 txnHash: approveTx.hash,
                 text: "Approving",
-                type: "approve_",
+                type: "approving",
             }),
         );
         dispatch(success({ text: messages.tx_successfully_send }));
@@ -181,7 +187,7 @@ interface IBuyPresale {
 }
 
 export const buyPresale = createAsyncThunk("presale/buyPresale", async ({ value, presaleAddress, provider }: IBuyPresale, { dispatch }) => {
-    const valueInWei = ethers.utils.parseUnits(value.toString(), "gwei");
+    const valueInWei = ethers.utils.parseUnits(value.toString(), 18);
 
     const signer = provider.getSigner();
     const presale = new Contract(presaleAddress, PresaleContract, signer);
@@ -195,13 +201,12 @@ export const buyPresale = createAsyncThunk("presale/buyPresale", async ({ value,
             fetchPendingTxns({
                 txnHash: presaleTx.hash,
                 text: "Purchasing from presale ",
-                type: "presale_"
+                type: "presale"
             }),
         );
         dispatch(success({ text: messages.tx_successfully_send }));
         await presaleTx.wait();
         dispatch(info({ text: messages.your_balance_updated }));
-        //dispatch(calculateUserBondDetails({ address, bond, networkID, provider }));
         return;
     } catch (err: any) {
         if (err.code === -32603 && err.message.indexOf("ds-math-sub-underflow") >= 0) {
@@ -220,39 +225,48 @@ export const buyPresale = createAsyncThunk("presale/buyPresale", async ({ value,
 
 interface IClaimPresale {
     address: string;
-    contractAddress: string;
-    psiAmount: string;
+    presaleAddress: string;
     networkID: Networks;
     provider: StaticJsonRpcProvider | JsonRpcProvider;
+    stake: boolean;
 }
 
-export const claimPresale = createAsyncThunk("presale/claimPresale", async ({ address, contractAddress, psiAmount, networkID, provider }: IClaimPresale, { dispatch }) => {
+export const claimPresale = createAsyncThunk("presale/claimPresale", async ({ address, presaleAddress, networkID, provider, stake }: IClaimPresale, { dispatch }) => {
     if (!provider) {
         dispatch(warning({ text: messages.please_connect_wallet }));
         return;
     }
 
-    const valueInWei = ethers.utils.parseUnits(psiAmount.toString(), "ether");
-
     const signer = provider.getSigner();
-    const presaleContract = new Contract(contractAddress, PresaleContract, signer);
+    const presale = new Contract(presaleAddress, PresaleContract, signer);
 
     let claimTx;
     try {
         const gasPrice = await getGasPrice(provider);
-
-        claimTx = await presaleContract.claim(valueInWei, { gasPrice });
-        const pendingTxnType = "calim_presale_";
-        dispatch(
-            fetchPendingTxns({
-                txnHash: claimTx.hash,
-                text: "Claiming PSI",
-                type: pendingTxnType,
-            }),
-        );
+        const claimablePsi = await presale.claimableFor(address);
+        if(stake) {
+            claimTx = await presale.stake(claimablePsi, { gasPrice });
+            dispatch(
+                fetchPendingTxns({
+                    txnHash: claimTx.hash,
+                    text: "Claiming PSI",
+                    type: "claiming",
+                }),
+            );
+        } 
+        else{ 
+            claimTx = await presale.claim(claimablePsi, { gasPrice });
+            console.log("CLAIMTX: ",claimTx.hash);
+            dispatch(
+                fetchPendingTxns({
+                    txnHash: claimTx.hash,
+                    text: "Claiming PSI",
+                    type: "claiming",
+                }),
+            );
+        }
         dispatch(success({ text: messages.tx_successfully_send }));
         await claimTx.wait();
-        // await dispatch(calculateUserBondDetails({ address, bond, networkID, provider }));
         dispatch(getBalances({ address, networkID, provider }));
         dispatch(info({ text: messages.your_balance_updated }));
         return;
