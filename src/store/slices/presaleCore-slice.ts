@@ -4,24 +4,24 @@ import { getAddresses } from "../../constants";
 import { fetchPendingTxns, clearPendingTxn } from "./pending-txns-slice";
 import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
 import { JsonRpcProvider, StaticJsonRpcProvider } from "@ethersproject/providers";
-import { PresaleContract } from "../../abi/index";
+import { PresalePrestakedContract } from "../../abi/index";
 import { Networks } from "../../constants/blockchain";
 import { RootState } from "../store";
-import { error, warning, success, info } from "../slices/messages-slice";
+import { error, warning, success, info } from "./messages-slice";
 import { messages } from "../../constants/messages";
 import { getGasPrice } from "../../helpers/get-gas-price";
 import { frax } from "src/helpers/bond";
 import { prettyVestingPeriod, setAll } from "../../helpers";
 
-interface IGetPresaleDetails {
+interface IGetPresaleCoreDetails {
     provider: StaticJsonRpcProvider | JsonRpcProvider;
     networkID: Networks;
     address: string;
 }
 
-export interface IPresaleDetails {
+export interface IPresaleCoreDetails {
     contract: string;
-    claimablePsi: string;
+    claimableFor: string;
     amountBuyable: string;
     claimedPsi: string;
     vestingStart: string;
@@ -29,57 +29,50 @@ export interface IPresaleDetails {
     psiPrice: number;
     allowanceVal: number;
     balanceVal: number;
+    claimedSpsi: string;
+    boughtAmount: string;
 }
 
-export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", async ({ provider, networkID, address }: IGetPresaleDetails, { dispatch }) => {
-    let claimablePsi = "",
+export const getPresaleCoreDetails = createAsyncThunk("presaleCore/getPresaleCoreDetails", async ({ provider, networkID, address }: IGetPresaleCoreDetails, { dispatch }) => {
+    let claimableFor = "",
         amountBuyable = "",
         claimedPsi = "",
         vestingStart = "",
         vestingTerm = "",
-        psiPrice = 0;
+        psiPrice = 0,
+        boughtAmount = "",
+        claimedSpsi = "";
 
     const addresses = getAddresses(networkID);
-    let approvedContractAddress = "";
-    let isApproved = false;
-    while (!isApproved) {
-        let contributorContract = new Contract(addresses.presaleContributor, PresaleContract, provider);
-        if ((await contributorContract.buyableFor(address)) > 0) {
-            approvedContractAddress = addresses.presaleContributor;
-            isApproved = true;
-        }
-        let phase1Contract = new Contract(addresses.presalePhase1, PresaleContract, provider);
-        if ((await phase1Contract.buyableFor(address)) > 0) {
-            approvedContractAddress = addresses.presalePhase1;
-            isApproved = true;
-        }
-        let phase2Contract = new Contract(addresses.presalePhase2, PresaleContract, provider);
-        if ((await phase2Contract.buyableFor(address)) > 0) {
-            approvedContractAddress = addresses.presalePhase2;
-            isApproved = true;
-        }
-        let phase3Contract = new Contract(addresses.presalePhase3, PresaleContract, provider);
-        if ((await phase3Contract.buyableFor(address)) > 0) {
-            approvedContractAddress = addresses.presalePhase3;
-            isApproved = true;
-        }
+    let approvedContractAddress = addresses.presaleCore;
+    let isApproved = true;
+    
+    let coreContract = new Contract(addresses.presaleCore, PresalePrestakedContract, provider);
+    if ((await coreContract.buyableFor(address)) > 0) {
+        approvedContractAddress = addresses.presaleCore;
+        isApproved = true;
+    } else {
+        return;
     }
+    
+    claimableFor = await coreContract.claimableFor(address);
+    amountBuyable = await coreContract.buyableFor(address);
+    claimedSpsi = await coreContract.claimed(address);
+    const term = await coreContract.terms(address);
+    claimedPsi = term.claimedAmount;
+    boughtAmount = term.boughtAmount;
 
-    let approvedContract = new Contract(approvedContractAddress, PresaleContract, provider);
-
-    claimablePsi = await approvedContract.claimableFor(address);
-    amountBuyable = await approvedContract.buyableFor(address);
-    claimedPsi = await approvedContract.claimed(address);
-
-    const vestingStartBlock = await approvedContract.vestingStart();
-    const vestingTermBlock = await approvedContract.vestingPeriod();
-    psiPrice = await approvedContract.pricePerBase();
+    const vestingStartBlock = await coreContract.vestingStart();
+    const vestingTermBlock = await coreContract.vestingPeriod();
+    psiPrice = await coreContract.pricePerBase();
 
     const currentBlock = await provider.getBlockNumber();
 
-    claimablePsi = ethers.utils.formatUnits(claimablePsi, 9);
+    claimableFor = ethers.utils.formatUnits(claimableFor, 18);
     amountBuyable = ethers.utils.formatEther(amountBuyable);
     claimedPsi = ethers.utils.formatUnits(claimedPsi, 9);
+    boughtAmount = ethers.utils.formatUnits(boughtAmount, 9);
+    claimedSpsi = ethers.utils.formatUnits(claimedSpsi, 0);
 
     vestingStart = prettyVestingPeriod(currentBlock, vestingStartBlock);
     vestingTerm = prettyVestingPeriod(vestingStartBlock, vestingStartBlock.add(vestingTermBlock));
@@ -92,9 +85,11 @@ export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", a
     const allowanceVal = ethers.utils.formatEther(allowance);
     const balanceVal = ethers.utils.formatEther(balance);
 
+    approvedContractAddress = addresses.presaleCore;
+
     return {
         approvedContractAddress,
-        claimablePsi,
+        claimableFor,
         amountBuyable,
         claimedPsi,
         vestingStart,
@@ -102,6 +97,8 @@ export const getPresaleDetails = createAsyncThunk("presale/getPresaleDetails", a
         psiPrice,
         allowanceVal,
         balanceVal,
+        claimedSpsi,
+        boughtAmount,
     };
 });
 
@@ -117,7 +114,7 @@ export interface allowanceDetails {
     balance: number;
 }
 
-export const changeApproval = createAsyncThunk("presale/changeApproval", async ({ provider, networkID, presaleAddress, address }: IChangeApproval, { dispatch }) => {
+export const changeApproval = createAsyncThunk("presaleCore/changeApproval", async ({ provider, networkID, presaleAddress, address }: IChangeApproval, { dispatch }) => {
     if (!provider) {
         dispatch(warning({ text: messages.please_connect_wallet }));
         return;
@@ -166,16 +163,16 @@ interface IBuyPresale {
     provider: StaticJsonRpcProvider | JsonRpcProvider;
 }
 
-export const buyPresale = createAsyncThunk("presale/buyPresale", async ({ value, presaleAddress, provider }: IBuyPresale, { dispatch }) => {
+export const buyPresale = createAsyncThunk("presaleCore/buyPresale", async ({ value, presaleAddress, provider }: IBuyPresale, { dispatch }) => {
     const valueInWei = ethers.utils.parseUnits(value.toString(), 18);
 
     const signer = provider.getSigner();
-    const presale = new Contract(presaleAddress, PresaleContract, signer);
+    const coreContract = new Contract(presaleAddress, PresalePrestakedContract, signer);
 
     let presaleTx;
     try {
         const gasPrice = await getGasPrice(provider);
-        presaleTx = await presale.buy(valueInWei, { gasPrice });
+        presaleTx = await coreContract.buy(valueInWei, { gasPrice });
         dispatch(
             fetchPendingTxns({
                 txnHash: presaleTx.hash,
@@ -205,26 +202,39 @@ export const buyPresale = createAsyncThunk("presale/buyPresale", async ({ value,
 interface IClaimPresale {
     address: string;
     presaleAddress: string;
+    value: string;
     networkID: Networks;
     provider: StaticJsonRpcProvider | JsonRpcProvider;
     stake: boolean;
 }
 
-export const claimPresale = createAsyncThunk("presale/claimPresale", async ({ address, presaleAddress, networkID, provider, stake }: IClaimPresale, { dispatch }) => {
+export const claimPresale = createAsyncThunk("presaleCore/claimPresale", async ({ address, presaleAddress, value, networkID, provider, stake }: IClaimPresale, { dispatch }) => {
     if (!provider) {
         dispatch(warning({ text: messages.please_connect_wallet }));
         return;
     }
 
+    if (value == "") {
+        dispatch(warning({ text: messages.before_minting }));
+        return;
+    }
+
+    const valueInWei = ethers.utils.parseUnits(value.toString(), 18);
+
     const signer = provider.getSigner();
-    const presale = new Contract(presaleAddress, PresaleContract, signer);
+    const coreContract = new Contract(presaleAddress, PresalePrestakedContract, signer);
+
+    const claimableFor = await coreContract.claimableFor(address);
+    if(claimableFor < valueInWei) {
+        dispatch(error({ text: messages.try_mint_more(ethers.utils.formatUnits(claimableFor, 18)) }));
+        return;
+    }
 
     let claimTx;
     try {
         const gasPrice = await getGasPrice(provider);
-        const claimablePsi = await presale.claimableFor(address);
         if (stake) {
-            claimTx = await presale.stake(claimablePsi, { gasPrice });
+            claimTx = await coreContract.stake(valueInWei, stake, { gasPrice });
             dispatch(
                 fetchPendingTxns({
                     txnHash: claimTx.hash,
@@ -233,7 +243,7 @@ export const claimPresale = createAsyncThunk("presale/claimPresale", async ({ ad
                 }),
             );
         } else {
-            claimTx = await presale.claim(claimablePsi, { gasPrice });
+            claimTx = await coreContract.claim(valueInWei, { gasPrice });
             dispatch(
                 fetchPendingTxns({
                     txnHash: claimTx.hash,
@@ -256,10 +266,10 @@ export const claimPresale = createAsyncThunk("presale/claimPresale", async ({ ad
     }
 });
 
-export interface IPresaleSlice {
+export interface IPresaleCoreSlice {
     loading: boolean;
     approvedContractAddress: string;
-    claimablePsi: number;
+    claimableFor: number;
     amountBuyable: string;
     claimedPsi: number;
     vestingStart: string;
@@ -267,12 +277,14 @@ export interface IPresaleSlice {
     psiPrice: number;
     allowanceVal: number;
     balanceVal: number;
+    claimedSpsi: number;
+    boughtAmount: number;
 }
 
-const initialState: IPresaleSlice = {
+const initialState: IPresaleCoreSlice = {
     loading: true,
     approvedContractAddress: "",
-    claimablePsi: 0,
+    claimableFor: 0,
     amountBuyable: "",
     claimedPsi: 0,
     vestingStart: "",
@@ -280,10 +292,12 @@ const initialState: IPresaleSlice = {
     psiPrice: 0,
     allowanceVal: 0,
     balanceVal: 0,
+    claimedSpsi: 0,
+    boughtAmount: 0,
 };
 
-const presaleSlice = createSlice({
-    name: "presale",
+const presaleCoreSlice = createSlice({
+    name: "presaleCore",
     initialState,
     reducers: {
         fetchPresaleSuccess(state, action) {
@@ -292,24 +306,24 @@ const presaleSlice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(getPresaleDetails.pending, state => {
+            .addCase(getPresaleCoreDetails.pending, state => {
                 state.loading = true;
             })
-            .addCase(getPresaleDetails.fulfilled, (state, action) => {
+            .addCase(getPresaleCoreDetails.fulfilled, (state, action) => {
                 setAll(state, action.payload);
                 state.loading = false;
             })
-            .addCase(getPresaleDetails.rejected, (state, { error }) => {
+            .addCase(getPresaleCoreDetails.rejected, (state, { error }) => {
                 state.loading = false;
                 console.log(error);
             });
     },
 });
 
-export default presaleSlice.reducer;
+export default presaleCoreSlice.reducer;
 
-export const { fetchPresaleSuccess } = presaleSlice.actions;
+export const { fetchPresaleSuccess } = presaleCoreSlice.actions;
 
-const baseInfo = (state: RootState) => state.presale;
+const baseInfo = (state: RootState) => state.presaleCore;
 
-export const getPresaleState = createSelector(baseInfo, claiming => claiming);
+export const getPresaleCoreState = createSelector(baseInfo, claiming => claiming);
