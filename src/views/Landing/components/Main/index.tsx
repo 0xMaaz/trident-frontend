@@ -15,7 +15,7 @@ function Main() {
                 <p>and earn compounding interest</p>
             </div>
             <div className="landing-main-btns-wrap">
-                <RouterLink to="/stake">
+                <RouterLink to="/dashboard">
                     <div className="landing-main-btn">
                         <p>Enter Atlantis</p>
                     </div>

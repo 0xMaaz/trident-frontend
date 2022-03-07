@@ -114,7 +114,7 @@ function PresaleCore() {
                     <Grid className="presale-card-grid" container direction="column" spacing={2}>
                         <Grid item>
                             <div className="presale-card-header">
-                                <p className="presale-card-header-title">Presale</p>
+                                <p className="presale-card-header-title">Presale Core</p>
                             </div>
                         </Grid>
 
@@ -124,7 +124,7 @@ function PresaleCore() {
                                     <div className="presale-card-wallet-connect-btn" onClick={connect}>
                                         <p>Connect Wallet</p>
                                     </div>
-                                    <p className="presale-card-wallet-desc-text">Connect your wallet to stake PSI tokens!</p>
+                                    <p className="presale-card-wallet-desc-text">Connect your wallet to purchase presale!</p>
                                 </div>
                             )}
                             {address && (

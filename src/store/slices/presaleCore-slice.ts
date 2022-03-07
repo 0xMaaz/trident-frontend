@@ -48,7 +48,9 @@ export const getPresaleCoreDetails = createAsyncThunk("presaleCore/getPresaleCor
     let isApproved = true;
     
     let coreContract = new Contract(addresses.presaleCore, PresalePrestakedContract, provider);
-    if ((await coreContract.buyableFor(address)) > 0) {
+    const term = await coreContract.terms(address);
+    if ((term.whitelistedAmount) > 0) {
+        console.log("SUCCESS");
         approvedContractAddress = addresses.presaleCore;
         isApproved = true;
     } else {
@@ -58,7 +60,6 @@ export const getPresaleCoreDetails = createAsyncThunk("presaleCore/getPresaleCor
     claimableFor = await coreContract.claimableFor(address);
     amountBuyable = await coreContract.buyableFor(address);
     claimedSpsi = await coreContract.claimed(address);
-    const term = await coreContract.terms(address);
     claimedPsi = term.claimedAmount;
     boughtAmount = term.boughtAmount;
 
@@ -84,8 +85,6 @@ export const getPresaleCoreDetails = createAsyncThunk("presaleCore/getPresaleCor
 
     const allowanceVal = ethers.utils.formatEther(allowance);
     const balanceVal = ethers.utils.formatEther(balance);
-
-    approvedContractAddress = addresses.presaleCore;
 
     return {
         approvedContractAddress,

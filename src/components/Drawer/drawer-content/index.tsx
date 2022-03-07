@@ -25,13 +25,7 @@ function NavContent() {
         if (currentPath.indexOf("dashboard") >= 0 && page === "dashboard") {
             return true;
         }
-        if (currentPath.indexOf("stake") >= 0 && page === "stake") {
-            return true;
-        }
-        if (currentPath.indexOf("mints") >= 0 && page === "mints") {
-            return true;
-        }
-        if (currentPath.indexOf("presale") >= 0 && page === "presale") {
+        if (currentPath.indexOf("presaleCore") >= 0 && page === "presaleCore") {
             return true;
         }
         return false;
@@ -71,63 +65,18 @@ function NavContent() {
 
                     <Link
                         component={NavLink}
-                        to="/stake"
-                        isActive={(match: any, location: any) => {
-                            return checkPage(location, "stake");
-                        }}
-                        className={classnames("button-dapp-menu", { active: isActive })}
-                    >
-                        <div className="dapp-menu-item">
-                            <SvgIcon component={StakeIcon} />
-                            <p>Stake</p>
-                        </div>
-                    </Link>
-
-                    <Link
-                        component={NavLink}
-                        id="bond-nav"
-                        to="/mints"
-                        isActive={(match: any, location: any) => {
-                            return checkPage(location, "mints");
-                        }}
-                        className={classnames("button-dapp-menu", { active: isActive })}
-                    >
-                        <div className="dapp-menu-item">
-                            <SvgIcon component={BondIcon} />
-                            <p>Mint</p>
-                        </div>
-                    </Link>
-
-                    <Link
-                        component={NavLink}
                         id="presale-nav"
-                        to="/presale"
+                        to="/presaleCore"
                         isActive={(match: any, location: any) => {
-                            return checkPage(location, "presale");
+                            return checkPage(location, "presaleCore");
                         }}
                         className={classnames("button-dapp-menu", { active: isActive })}
                     >
                         <div className="dapp-menu-item">
                             <SvgIcon component={BondIcon} />
-                            <p>Presale</p>
+                            <p>Presale Core</p>
                         </div>
                     </Link>
-
-                    <div className="bond-discounts">
-                        <p className="bond-discounts--title">Mint discounts</p>
-                        {bonds.map((bond, i) => (
-                            <Link component={NavLink} to={`/mints/${bond.name}`} key={i} className={"bond"}>
-                                {!bond.bondDiscount ? (
-                                    <Skeleton variant="text" width={"150px"} />
-                                ) : (
-                                    <p>
-                                        {bond.displayName}
-                                        <span className="bond-pair-roi">{bond.bondDiscount && trim(bond.bondDiscount * 100, 2)}%</span>
-                                    </p>
-                                )}
-                            </Link>
-                        ))}
-                    </div>
                 </div>
             </div>
             <div className="dapp-menu-doc-link">
