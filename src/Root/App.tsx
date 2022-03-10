@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAddress, useWeb3Context } from "../hooks";
 import { calcBondDetails } from "../store/slices/bond-slice";
 import { getPresaleCoreDetails } from "src/store/slices/presaleCore-slice";
+import { getPresaleContrDetails } from "src/store/slices/presaleContr-slice";
 import { loadAppDetails } from "../store/slices/app-slice";
 import { loadAccountDetails, calculateUserBondDetails } from "../store/slices/account-slice";
 import { IReduxState } from "../store/slices/state.interface";
 import Loading from "../components/Loader";
 import useBonds from "../hooks/bonds";
 import ViewBase from "../components/ViewBase";
-import { Dashboard, NotFound, PresaleCore } from "../views";
+import { Dashboard, NotFound, PresaleCore, PresaleContr } from "../views";
 import "./style.scss";
 import Landing from "src/views/Landing";
 
@@ -55,6 +56,7 @@ function App() {
                 dispatch(calcBondDetails({ bond, value: null, provider: loadProvider, networkID: chainID }));
             });
             dispatch(getPresaleCoreDetails({ provider, networkID: chainID, address }))
+            dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }))
         },
         [connected],
     );
@@ -101,9 +103,13 @@ function App() {
                     <Dashboard />
                 </Route>
 
-                <Route path = "/presaleCore">
+                <Route path = "/core">
                     <PresaleCore />
-                </Route>                
+                </Route> 
+
+                <Route path = "/contributor">
+                    <PresaleContr />
+                </Route>                  
 
                 <Route component={NotFound} />
             </Switch>
