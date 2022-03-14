@@ -25,7 +25,10 @@ function NavContent() {
         if (currentPath.indexOf("dashboard") >= 0 && page === "dashboard") {
             return true;
         }
-        if (currentPath.indexOf("presaleCore") >= 0 && page === "presaleCore") {
+        if (currentPath.indexOf("core") >= 0 && page === "core") {
+            return true;
+        }
+        if (currentPath.indexOf("contributor") >= 0 && page === "contributor") {
             return true;
         }
         return false;
