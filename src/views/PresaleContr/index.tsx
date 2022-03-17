@@ -60,11 +60,10 @@ function PresaleContr() {
         }
     };
 
-
     const onSeekApproval = async () => {
         if (await checkWrongNetwork()) return;
         await dispatch(changeApproval({ provider, networkID: chainID, presaleAddress, address }));
-        dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }))
+        dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }));
     };
 
     const onBuyPresale = async () => {
@@ -74,7 +73,7 @@ function PresaleContr() {
         } else {
             await dispatch(buyPresale({ value: String(quantity), presaleAddress, provider }));
             setQuantity("");
-            dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }))
+            dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }));
         }
     };
 
@@ -82,7 +81,7 @@ function PresaleContr() {
         if (await checkWrongNetwork()) return;
         await dispatch(claimPresale({ address, presaleAddress, networkID: chainID, provider, stake }));
         setQuantity("");
-        dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }))
+        dispatch(getPresaleContrDetails({ provider, networkID: chainID, address }));
     };
 
     const hasAllowance = useCallback(() => {
@@ -130,40 +129,38 @@ function PresaleContr() {
                                             </div>
                                         </div>
 
-                                        
                                         <div className="presale-card-action-row">
                                             {view === 0 && (
-                                            <OutlinedInput
-                                                type="number"
-                                                placeholder="Amount of FRAX"
-                                                className="presale-card-action-input"
-                                                value={quantity}
-                                                onChange={e => setQuantity(e.target.value)}
-                                                labelWidth={0}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <div onClick={setMax} className="presale-card-action-input-btn">
-                                                            <p>Max</p>
-                                                        </div>
-                                                    </InputAdornment>
-                                                }
-                                            />)}
+                                                <OutlinedInput
+                                                    type="number"
+                                                    placeholder="Amount of FRAX"
+                                                    className="presale-card-action-input"
+                                                    value={quantity}
+                                                    onChange={e => setQuantity(e.target.value)}
+                                                    labelWidth={0}
+                                                    endAdornment={
+                                                        <InputAdornment position="end">
+                                                            <div onClick={setMax} className="presale-card-action-input-btn">
+                                                                <p>Max</p>
+                                                            </div>
+                                                        </InputAdornment>
+                                                    }
+                                                />
+                                            )}
 
                                             {view === 0 && (
-                                                <div className="presale-card-tab-panel"> 
+                                                <div className="presale-card-tab-panel">
                                                     {address && !isAllowed() ? (
                                                         <div className="presale-card-tab-panel-non">
                                                             <p>Not Eligible for Presale</p>
                                                         </div>
-                                                    ) : (
-                                                    address && hasAllowance() ? (
+                                                    ) : address && hasAllowance() ? (
                                                         <div
                                                             className="presale-card-tab-panel-btn"
                                                             onClick={() => {
                                                                 if (isPendingTxn(pendingTransactions, "presale")) return;
                                                                 onBuyPresale();
                                                             }}
-                                                            
                                                         >
                                                             <p>{txnButtonText(pendingTransactions, "presale", "Buy PSI")}</p>
                                                         </div>
@@ -177,18 +174,18 @@ function PresaleContr() {
                                                         >
                                                             <p>{txnButtonText(pendingTransactions, "approving", "Approve")}</p>
                                                         </div>
-                                                    ))}
+                                                    )}
                                                 </div>
                                             )}
 
                                             {view === 1 && (
-                                                <div className="presale-card-tab-panel">
+                                                <div className="presale-card-tab-panel claim-panel">
                                                     {address && !isAllowed() ? (
                                                         <div className="presale-card-tab-panel-non">
                                                             <p>Not Eligible for Presale</p>
                                                         </div>
                                                     ) : (
-                                                        <div>
+                                                        <>
                                                             <div
                                                                 className="presale-card-tab-panel-btn"
                                                                 onClick={() => {
@@ -207,66 +204,85 @@ function PresaleContr() {
                                                             >
                                                                 <p>{txnButtonText(pendingTransactions, "claiming", "Claim and Autostake")}</p>
                                                             </div>
-                                                        </div>
+                                                        </>
                                                     )}
                                                 </div>
                                             )}
                                         </div>
-
-                                    
                                     </div>
                                     {view === 0 && (
                                         <div className="presale-user-data">
                                             <div className="data-row">
                                                 <p className="data-row-name">Amount of PSI You Will Recieve</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(Number(quantity)/(Number(psiPrice)/Math.pow(10,18)),2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? (
+                                                        <Skeleton width="80px" />
+                                                    ) : (
+                                                        <>{trim(Number(quantity) / (Number(psiPrice) / Math.pow(10, 18)), 2)} PSI</>
+                                                    )}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Max Amount Payable</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>${trim(Number(buyable),2)} FRAX</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>${trim(Number(buyable), 2)} FRAX</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Max Amount Buyable</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(Number(buyable)/(Number(psiPrice)/Math.pow(10,18)),2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? (
+                                                        <Skeleton width="80px" />
+                                                    ) : (
+                                                        <>{trim(Number(buyable) / (Number(psiPrice) / Math.pow(10, 18)), 2)} PSI</>
+                                                    )}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Price per PSI</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>${Number(psiPrice)/Math.pow(10,18)} FRAX</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>${Number(psiPrice) / Math.pow(10, 18)} FRAX</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Time Until Vesting Starts</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Vesting Term</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
                                             </div>
-                                        </div>)}
+                                        </div>
+                                    )}
                                     {view === 1 && (
                                         <div className="presale-user-data">
                                             <div className="data-row">
                                                 <p className="data-row-name">Claimable PSI</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(claimablePsi, 2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{trim(claimablePsi, 2)} PSI</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Claimed PSI</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{trim(claimedPsi, 2)} PSI</>}</p>
+                                                <p className="data-row-value">
+                                                    {isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{trim(claimedPsi, 2)} PSI</>}
+                                                </p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Time Until Vesting Starts</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{untilVestingStart}</>}</p>
                                             </div>
 
                                             <div className="data-row">
                                                 <p className="data-row-name">Vesting Term</p>
-                                                <p className="data-row-value">{isAppLoading || presaleAddress=="" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
+                                                <p className="data-row-value">{isAppLoading || presaleAddress == "" ? <Skeleton width="80px" /> : <>{vestingPeriod}</>}</p>
                                             </div>
                                         </div>
                                     )}
