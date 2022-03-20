@@ -151,11 +151,24 @@
 
                         .presale-card-tab-panel-btn {
                             @include theme.primary-button();
+
+                            &.core {
+                                margin-bottom: 1rem;
+
+                                &:last-of-type {
+                                    margin-bottom: 1rem;
+                                }
+                            }
                         }
                         .presale-card-tab-panel-non {
                             @include theme.primary-button();
                             cursor: default;
                         }
+                    }
+
+                    .claim-panel-core {
+                        // display: flex;
+                        // flex-direction: column;
                     }
                 }
 
@@ -244,4 +257,3 @@
         width: 100%;
     }
 }
-

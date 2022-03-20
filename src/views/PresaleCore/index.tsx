@@ -189,15 +189,15 @@ function PresaleCore() {
                                             )}
 
                                             {view === 1 && (
-                                                <div className="presale-card-tab-panel">
+                                                <div className="presale-card-tab-panel claim-panel-core">
                                                     {address && !isAllowed() ? (
                                                         <div className="presale-card-tab-panel-non">
                                                             <p>Not Eligible for Presale</p>
                                                         </div>
                                                     ) : (
-                                                        <div>
+                                                        <>
                                                             <div
-                                                                className="presale-card-tab-panel-btn"
+                                                                className="presale-card-tab-panel-btn core"
                                                                 onClick={() => {
                                                                     if (isPendingTxn(pendingTransactions, "claiming")) return;
                                                                     onClaimPresale(false, quantity);
@@ -206,7 +206,7 @@ function PresaleCore() {
                                                                 <p>{txnButtonText(pendingTransactions, "claiming", "Claim PSI")}</p>
                                                             </div>
                                                             <div
-                                                                className="presale-card-tab-panel-btn"
+                                                                className="presale-card-tab-panel-btn core"
                                                                 onClick={() => {
                                                                     if (isPendingTxn(pendingTransactions, "claiming")) return;
                                                                     onClaimPresale(true, quantity);
@@ -214,7 +214,7 @@ function PresaleCore() {
                                                             >
                                                                 <p>{txnButtonText(pendingTransactions, "claiming", "Claim and Autostake")}</p>
                                                             </div>
-                                                        </div>
+                                                        </>
                                                     )}
                                                 </div>
                                             )}
