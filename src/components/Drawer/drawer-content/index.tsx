@@ -77,21 +77,6 @@ function NavContent() {
                             <p>Presale Core</p>
                         </div>
                     </Link>
-
-                    <Link
-                        component={NavLink}
-                        id="presale-nav"
-                        to="/contributor"
-                        isActive={(match: any, location: any) => {
-                            return checkPage(location, "contributor");
-                        }}
-                        className={classnames("button-dapp-menu", { active: isActive })}
-                    >
-                        <div className="dapp-menu-item">
-                            <SvgIcon component={BondIcon} />
-                            <p>Presale Contributor</p>
-                        </div>
-                    </Link>
                 </div>
             </div>
             <div className="dapp-menu-doc-link">

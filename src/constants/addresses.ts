@@ -9,10 +9,6 @@ const ONE_MAINNET = {
     TREASURY_ADDRESS: "0x33B9dfba0E67ab54c1a7694d1607170C408134f2",
     FRAX_ADDRESS: "0xdA0113d74D8d3fc8401090f385cD98aa3E027505",
     presaleCore: "0xd719784EFB182EB579Dc5DFD8590FBcFcf02bfFd", // for core team, uses Presale.abi (but the contract is subtly different)
-    presaleContributor: "0xCe5A688530D725a9CE50371a7fcB1e9062Ba9221", // for presale phase 1,2,3 and non-core contributors. Uses Presale.abi but works differently than presalePrestaked.
-    presalePhase1: "0xCe5A688530D725a9CE50371a7fcB1e9062Ba9221",
-    presalePhase2: "0xCe5A688530D725a9CE50371a7fcB1e9062Ba9221",
-    presalePhase3: "0xCe5A688530D725a9CE50371a7fcB1e9062Ba9221",  
 };
 
 export const getAddresses = (networkID: number) => {
