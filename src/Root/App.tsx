@@ -10,7 +10,7 @@ import { IReduxState } from "../store/slices/state.interface";
 import Loading from "../components/Loader";
 import useBonds from "../hooks/bonds";
 import ViewBase from "../components/ViewBase";
-import { Dashboard, NotFound, PresaleCore } from "../views";
+import { Stake, Dashboard, NotFound, PresaleCore } from "../views";
 import "./style.scss";
 import Landing from "src/views/Landing";
 
@@ -99,6 +99,10 @@ function App() {
             <Switch>
                 <Route exact path="/dashboard">
                     <Dashboard />
+                </Route>
+
+                <Route path="/stake">
+                    <Stake />
                 </Route>
 
                 <Route path = "/core">

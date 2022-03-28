@@ -28,7 +28,7 @@ function NavContent() {
         if (currentPath.indexOf("core") >= 0 && page === "core") {
             return true;
         }
-        if (currentPath.indexOf("contributor") >= 0 && page === "contributor") {
+        if (currentPath.indexOf("stake") >= 0 && page === "stake") {
             return true;
         }
         return false;
@@ -63,6 +63,20 @@ function NavContent() {
                         <div className="dapp-menu-item">
                             <SvgIcon component={DashboardIcon} />
                             <p>Dashboard</p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        component={NavLink}
+                        to="/stake"
+                        isActive={(match: any, location: any) => {
+                            return checkPage(location, "stake");
+                        }}
+                        className={classnames("button-dapp-menu", { active: isActive })}
+                    >
+                        <div className="dapp-menu-item">
+                            <SvgIcon component={StakeIcon} />
+                            <p>Stake</p>
                         </div>
                     </Link>
 

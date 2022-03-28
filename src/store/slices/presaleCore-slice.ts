@@ -53,9 +53,7 @@ export const getPresaleCoreDetails = createAsyncThunk("presaleCore/getPresaleCor
         console.log("SUCCESS");
         approvedContractAddress = addresses.presaleCore;
         isApproved = true;
-    } else {
-        return;
-    }
+    } 
     
     claimableFor = await coreContract.claimableFor(address);
     amountBuyable = await coreContract.buyableFor(address);
