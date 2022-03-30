@@ -1,7 +1,6 @@
 import { Networks } from "../../constants/blockchain";
 import { LPBond } from "./lp-bond";
 import { StableBond } from "./stable-bond";
-
 import MimIcon from "../../assets/tokens/MIM.svg";
 import UstIcon from "../../assets/tokens/UST.svg";
 import FraxIcon from "../../assets/tokens/FRAX.svg";
@@ -48,27 +47,27 @@ export const frax = new StableBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.ONE]: {
-            bondAddress: "0x312418e484CE93851a5712A5CDd6bEe303080A67",
-            reserveAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7", // TODO - need this
+            bondAddress: "0x017b01b210F2Cb3B8b3c5F3A1b1FF2E7cf9177A3",
+            reserveAddress: "0xFa7191D292d5633f702B0bd7E3E3BcCC0e633200", // TODO - change to real FRAX after testing
         },
     },
 });
 
 // todo - rename
-export const mimPsi = new LPBond({
-    name: "mim_psi_lp",
-    displayName: "PSI-MIM LP",
-    bondToken: "MIM",
-    bondIconSvg: MimIcon,
+export const fraxPsi = new LPBond({
+    name: "frax_psi_lp",
+    displayName: "PSI-FRAX LP",
+    bondToken: "FRAX",
+    bondIconSvg: FraxIcon,
     bondContractABI: LpBondContract,
     reserveContractAbi: LpReserveContract,
     networkAddrs: {
         [Networks.ONE]: {
-            bondAddress: "0x19513619465B1331A3e4750a99310182426E9071",
-            reserveAddress: "0x113f413371fc4cc4c9d6416cf1de9dfd7bf747df", // TODO - change
+            bondAddress: "0x3BA4Ea56ac264a9c80850a5A5442DBaA440D3722",
+            reserveAddress: "0x8Ee113Eb4F0e9596A8e2a6Acd4095eeED1E0B9b6", // TODO - change
         },
     },
-    lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
+    lpUrl: "https://app.sushi.com/add/0x23eDB53026F17906cD7Fd9f4192fbD42bf61aC6d/0xFa7191D292d5633f702B0bd7E3E3BcCC0e633200",
 });
 
-export default [ust, frax];
+export default [frax, fraxPsi];

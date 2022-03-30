@@ -1,0 +1,80 @@
+@use "src/theme.scss";
+
+.message-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 720px;
+    border-radius: 6px;
+    background-color: theme.$black;
+    border: 1px solid theme.$dark-gray;
+    padding:20px;
+
+    margin: auto;
+
+    .message-infos-wrap {
+
+        .message-view-card-header {
+            display: flex;
+            direction: row;
+            align-content:center;
+            height: 40px;
+            .close-app-btn {
+                margin-right: 20px;
+            }
+            .message-view-card-title {
+                font-family: 'Cormorant Garamond', serif;
+                font-weight: bold;
+                font-size: 28px;
+                color: #FFe987;
+            }
+        }
+
+        .message-card {
+            p {
+                color: #ffffff;
+                font-size: 22px;
+                margin-bottom: 8px;
+            }
+
+            display: flex;
+            flex-direction: column;
+            // justify-content: center;
+            // align-items: center;
+
+            z-index: 2;
+
+            @include theme.card();
+            @include theme.card-hover();
+
+            background-color: theme.$dark-gray;
+            border: 1px solid theme.$dark-gray-2;
+
+            .message-sign-btn {
+                @include theme.primary-button();
+                p {
+                    font-family: "Cormorant Garamond", serif;
+                    font-weight: 600;
+                    font-size: 22px;
+                    color: #FFFFFF;
+                }
+            }
+
+            .card-title {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1rem;
+                color: #ccc;
+            }
+
+            .card-value {
+                font-family: 'Syne Mono', monospace;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: theme.$white;
+            }
+        }
+    }
+}

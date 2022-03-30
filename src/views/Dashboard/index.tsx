@@ -6,17 +6,34 @@ import { Skeleton } from "@material-ui/lab";
 import { IReduxState } from "../../store/slices/state.interface";
 import { IAppSlice } from "../../store/slices/app-slice";
 
-function Dashboard() {
+import { IconButton, SvgIcon, Link } from "@material-ui/core";
+import { ReactComponent as XIcon } from "../../assets/icons/x.svg";
+
+import classNames from "classnames";
+
+function Dashboard(props: any) {
     const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
     const app = useSelector<IReduxState, IAppSlice>(state => state.app);
 
     const trimmedStakingAPY = trim(app.stakingAPY * 100, 1);
 
     return (
-        <div className="dashboard-view">
+        <div className={classNames("dashboard-view", { disabled: !props.active })}>
             <div className="dashboard-infos-wrap">
+                <div className="dashboard-view-card-header">
+                    <a
+                        onClick={() => {
+                            window.parent.postMessage("closeMenu", window.location.origin);
+                            window.parent.postMessage("closeDashboard", window.location.origin);
+                        }}
+                        className="close-app-btn"
+                    >
+                        <SvgIcon color="primary" component={XIcon} />
+                    </a>
+                    <p className="dashboard-view-card-title">Dashboard</p>
+                </div>
                 <Zoom in={true}>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={2}>
                         <Grid item lg={6} md={6} sm={6} xs={12}>
                             <div className="dashboard-card">
                                 <p className="card-title">PSI Price</p>

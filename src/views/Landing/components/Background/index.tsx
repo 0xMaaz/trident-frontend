@@ -8,11 +8,11 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 function Background() {
     useEffect(() => {
         const debugObject = {
-            waveDepthColor: "#1e4d40",
-            waveSurfaceColor: "#4d9aaa",
+            waveDepthColor: "#0e2d20",
+            waveSurfaceColor: "#375f54",
             fogNear: 1,
             fogFar: 3,
-            fogColor: "#8e949d",
+            fogColor: "#0e1410",
         };
 
         /**
