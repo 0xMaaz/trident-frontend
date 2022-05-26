@@ -1,4 +1,4 @@
-# [Trident Frontend](https://tridentdao.finance/)
+# [Trident Frontend](https://trident.game/)
 This is the front-end repo for Trident. 
 
 ##  🔧 Setting up Local Development
